@@ -1,0 +1,148 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+// Navigation loader
+.navigation-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+  height: 3px;
+  background: transparent;
+
+  .loader-bar {
+    height: 100%;
+    background: linear-gradient(90deg,
+      rgba(59, 130, 246, 0.8) 0%,
+      rgba(139, 92, 246, 0.8) 50%,
+      rgba(59, 130, 246, 0.8) 100%
+    );
+    width: 0%;
+    animation: loading-progress 2s ease-in-out infinite;
+  }
+}
+
+// Main application
+.app-main {
+  width: 100%;
+  height: 100vh;
+  transition: opacity 0.2s ease;
+
+  &.loading {
+    opacity: 0.95;
+  }
+}
+
+// Error boundary
+.error-boundary {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 10000;
+  max-width: 400px;
+  animation: slide-in-right 0.3s ease-out;
+
+  .error-content {
+    padding: 20px;
+    text-align: center;
+
+    h3 {
+      color: #ef4444;
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #f1f5f9;
+      font-size: 14px;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    .dismiss-btn {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #ef4444;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: rgba(239, 68, 68, 0.3);
+        border-color: rgba(239, 68, 68, 0.5);
+      }
+
+      &:focus {
+        outline: 2px solid rgba(239, 68, 68, 0.5);
+        outline-offset: 2px;
+      }
+    }
+  }
+}
+
+// Animations
+@keyframes loading-progress {
+  0% {
+    width: 0%;
+    margin-left: 0%;
+  }
+  50% {
+    width: 70%;
+    margin-left: 15%;
+  }
+  100% {
+    width: 100%;
+    margin-left: 0%;
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .error-boundary {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    max-width: none;
+  }
+
+  .navigation-loader .loader-bar {
+    height: 2px;
+  }
+}
+
+// Mode accessibilité
+@media (prefers-reduced-motion: reduce) {
+  .navigation-loader .loader-bar {
+    animation: none;
+    width: 100%;
+    background: rgba(59, 130, 246, 0.6);
+  }
+
+  .error-boundary {
+    animation: none;
+  }
+
+  .app-main {
+    transition: none;
+  }
+}

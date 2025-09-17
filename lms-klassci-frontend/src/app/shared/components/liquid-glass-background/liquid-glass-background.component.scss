@@ -1,0 +1,265 @@
+:host {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.liquid-glass-background {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+  overflow: hidden;
+
+  &.variant-educator {
+    background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #581c87 100%);
+  }
+
+  &.variant-student {
+    background: linear-gradient(135deg, #065f46 0%, #047857 50%, #059669 100%);
+  }
+
+  &.variant-admin {
+    background: linear-gradient(135deg, #7c2d12 0%, #dc2626 50%, #ea580c 100%);
+  }
+
+  &.variant-dark {
+    background: linear-gradient(135deg, #000000 0%, #0f172a 50%, #1e293b 100%);
+  }
+}
+
+// Distortion layer pour effet liquid glass
+.distortion-layer {
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  width: 120%;
+  height: 120%;
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: 1;
+
+  .distortion-mesh {
+    width: 100%;
+    height: 100%;
+    background:
+      radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 40% 80%, rgba(99, 102, 241, 0.3) 0%, transparent 50%);
+    animation: liquid-distortion 8s ease-in-out infinite;
+    filter: blur(40px);
+  }
+}
+
+// Orbes flottants
+.orbs-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.floating-orb {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.4;
+  background: linear-gradient(45deg, var(--color), transparent);
+  filter: blur(1px);
+  animation: float var(--duration, 6s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+  left: var(--x, 50%);
+  top: var(--y, 50%);
+  transform: translate(-50%, -50%);
+
+  // Tailles dynamiques
+  width: var(--size, 200px);
+  height: var(--size, 200px);
+
+  // Optimisation GPU
+  will-change: transform, opacity;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+
+  // Animation pulse pour effet glow
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: inherit;
+    filter: blur(20px);
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1.2);
+    animation: pulse-glow 2s ease-in-out infinite alternate;
+  }
+}
+
+// Gradient overlay pour profondeur
+.gradient-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  pointer-events: none;
+
+  &.gradient-default {
+    background: linear-gradient(
+      180deg,
+      rgba(15, 23, 42, 0.1) 0%,
+      rgba(30, 41, 59, 0.3) 50%,
+      rgba(51, 65, 85, 0.6) 100%
+    );
+  }
+
+  &.gradient-educator {
+    background: linear-gradient(
+      180deg,
+      rgba(30, 58, 138, 0.1) 0%,
+      rgba(55, 48, 163, 0.3) 50%,
+      rgba(88, 28, 135, 0.6) 100%
+    );
+  }
+
+  &.gradient-student {
+    background: linear-gradient(
+      180deg,
+      rgba(6, 95, 70, 0.1) 0%,
+      rgba(4, 120, 87, 0.3) 50%,
+      rgba(5, 150, 105, 0.6) 100%
+    );
+  }
+
+  &.gradient-admin {
+    background: linear-gradient(
+      180deg,
+      rgba(124, 45, 18, 0.1) 0%,
+      rgba(220, 38, 38, 0.3) 50%,
+      rgba(234, 88, 12, 0.6) 100%
+    );
+  }
+}
+
+// Content wrapper avec backdrop-filter
+.content-wrapper {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+
+  &[data-blur-mode="backdrop"] {
+    backdrop-filter: blur(0.5px);
+    -webkit-backdrop-filter: blur(0.5px);
+  }
+
+  &[data-blur-mode="fallback"] {
+    // Fallback pour Firefox
+    background: rgba(15, 23, 42, 0.1);
+  }
+}
+
+// Mode performance réduit
+.effects-basic {
+  .distortion-layer {
+    display: none;
+  }
+
+  .floating-orb {
+    animation-duration: 8s !important;
+    filter: none;
+
+    &::before {
+      display: none;
+    }
+  }
+}
+
+// Animations keyframes
+@keyframes float {
+  0%, 100% {
+    transform: translate(-50%, -50%) translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translate(-50%, -50%) translateY(-20px) rotate(5deg);
+  }
+  66% {
+    transform: translate(-50%, -50%) translateY(10px) rotate(-3deg);
+  }
+}
+
+@keyframes pulse-glow {
+  0% {
+    opacity: 0.3;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0.7;
+    transform: translate(-50%, -50%) scale(1.3);
+  }
+}
+
+@keyframes liquid-distortion {
+  0%, 100% {
+    filter: blur(40px) contrast(1) brightness(1);
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    filter: blur(45px) contrast(1.1) brightness(1.1);
+    transform: scale(1.02) rotate(1deg);
+  }
+  50% {
+    filter: blur(50px) contrast(1.2) brightness(1.2);
+    transform: scale(1.05) rotate(0deg);
+  }
+  75% {
+    filter: blur(45px) contrast(1.1) brightness(1.1);
+    transform: scale(1.02) rotate(-1deg);
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .floating-orb {
+    animation-duration: 10s !important;
+
+    &::before {
+      display: none;
+    }
+  }
+
+  .distortion-layer {
+    opacity: 0.3;
+  }
+}
+
+// Réduction des animations pour préférences utilisateur
+@media (prefers-reduced-motion: reduce) {
+  .floating-orb,
+  .distortion-layer .distortion-mesh {
+    animation: none;
+  }
+
+  .floating-orb {
+    opacity: 0.2;
+  }
+}
+
+// Mode haute performance pour écrans larges
+@media (min-width: 1920px) and (min-resolution: 2dppx) {
+  .effects-advanced .floating-orb::before {
+    filter: blur(30px);
+  }
+
+  .effects-advanced .distortion-layer .distortion-mesh {
+    filter: blur(60px);
+  }
+}

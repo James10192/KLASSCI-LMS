@@ -1,0 +1,307 @@
+// Imports Tailwind CSS
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+// Import Angular Material theme
+@import '@angular/material/theming';
+
+// Variables globales liquid glass
+:root {
+  // Couleurs liquid glass
+  --lg-primary: #3b82f6;
+  --lg-secondary: #8b5cf6;
+  --lg-accent: #06b6d4;
+
+  // Opacités
+  --lg-glass-opacity: 0.1;
+  --lg-border-opacity: 0.2;
+  --lg-shadow-opacity: 0.15;
+
+  // Blur intensities
+  --lg-blur-sm: 4px;
+  --lg-blur-md: 8px;
+  --lg-blur-lg: 16px;
+  --lg-blur-xl: 24px;
+
+  // Transitions
+  --lg-transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --lg-transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --lg-transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+  // Espacements
+  --lg-spacing-xs: 0.5rem;
+  --lg-spacing-sm: 1rem;
+  --lg-spacing-md: 1.5rem;
+  --lg-spacing-lg: 2rem;
+  --lg-spacing-xl: 3rem;
+
+  // Rayons de bordure
+  --lg-radius-sm: 0.5rem;
+  --lg-radius-md: 0.75rem;
+  --lg-radius-lg: 1rem;
+  --lg-radius-xl: 1.25rem;
+}
+
+// Styles globaux
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+  color: #f1f5f9;
+  line-height: 1.6;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+// Sélection de texte
+::selection {
+  background: rgba(59, 130, 246, 0.3);
+  color: white;
+}
+
+::-moz-selection {
+  background: rgba(59, 130, 246, 0.3);
+  color: white;
+}
+
+// Scrollbars personnalisées
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.5);
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 0.7);
+}
+
+// Classes utilitaires liquid glass
+.lg-glass {
+  background: rgba(255, 255, 255, var(--lg-glass-opacity));
+  backdrop-filter: blur(var(--lg-blur-md));
+  -webkit-backdrop-filter: blur(var(--lg-blur-md));
+  border: 1px solid rgba(255, 255, 255, var(--lg-border-opacity));
+  border-radius: var(--lg-radius-md);
+}
+
+.lg-glass-strong {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(var(--lg-blur-lg));
+  -webkit-backdrop-filter: blur(var(--lg-blur-lg));
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.lg-glass-subtle {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(var(--lg-blur-sm));
+  -webkit-backdrop-filter: blur(var(--lg-blur-sm));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+// Classes d'animation
+.lg-animate-float {
+  animation: lg-float 6s ease-in-out infinite;
+}
+
+.lg-animate-glow {
+  animation: lg-glow 2s ease-in-out infinite alternate;
+}
+
+.lg-animate-fade-in {
+  animation: lg-fade-in 0.5s ease-out;
+}
+
+.lg-animate-slide-up {
+  animation: lg-slide-up 0.5s ease-out;
+}
+
+// Keyframes
+@keyframes lg-float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(2deg);
+  }
+}
+
+@keyframes lg-glow {
+  0% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 40px rgba(59, 130, 246, 0.6);
+  }
+}
+
+@keyframes lg-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes lg-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// États interactifs
+.lg-interactive {
+  cursor: pointer;
+  transition: all var(--lg-transition-normal);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(59, 130, 246, 0.8);
+    outline-offset: 2px;
+  }
+}
+
+// Typography
+.lg-text-gradient {
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 600;
+}
+
+.lg-text-glow {
+  text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+}
+
+// Fallbacks pour navigateurs non supportés
+.no-backdrop-filter {
+  .lg-glass {
+    background: rgba(30, 41, 59, 0.8);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .lg-glass-strong {
+    background: rgba(30, 41, 59, 0.9);
+  }
+
+  .lg-glass-subtle {
+    background: rgba(30, 41, 59, 0.6);
+  }
+}
+
+// Adaptations mobile
+@media (max-width: 768px) {
+  :root {
+    --lg-blur-sm: 2px;
+    --lg-blur-md: 4px;
+    --lg-blur-lg: 8px;
+    --lg-blur-xl: 12px;
+  }
+
+  .lg-animate-float {
+    animation-duration: 8s;
+  }
+}
+
+// Mode faible performance
+.low-memory-device {
+  .lg-glass {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(30, 41, 59, 0.8) !important;
+  }
+
+  .lg-animate-float,
+  .lg-animate-glow {
+    animation: none !important;
+  }
+}
+
+// Mode accessibilité
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .lg-animate-float,
+  .lg-animate-glow {
+    animation: none;
+  }
+}
+
+// Mode sombre automatique
+@media (prefers-color-scheme: dark) {
+  .lg-glass {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+}
+
+// Haute résolution
+@media (min-resolution: 2dppx) {
+  .lg-glass {
+    backdrop-filter: blur(calc(var(--lg-blur-md) * 1.2));
+    -webkit-backdrop-filter: blur(calc(var(--lg-blur-md) * 1.2));
+  }
+}
+
+// Styles Material Design customization
+.mat-mdc-snack-bar-container {
+  &.lg-snackbar {
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    color: white;
+  }
+}
+
+.mat-mdc-dialog-container {
+  &.lg-dialog {
+    background: rgba(15, 23, 42, 0.95) !important;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+  }
+}
