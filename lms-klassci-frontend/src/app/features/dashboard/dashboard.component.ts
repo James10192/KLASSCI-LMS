@@ -1,6 +1,7 @@
 import { Component, OnInit, signal, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { LiquidGlassBackgroundComponent } from '@shared/components/liquid-glass-background/liquid-glass-background.component';
 import { LiquidGlassCardComponent } from '@shared/components/liquid-glass-card/liquid-glass-card.component';
@@ -84,7 +85,7 @@ interface DashboardCard {
               <div class="card-content">
                 <div class="card-header">
                   <div class="card-icon" [attr.data-color]="card.color">
-                    <div [innerHTML]="card.icon"></div>
+                    <div [innerHTML]="getSafeHtml(card.icon)"></div>
                   </div>
                   <div class="card-info">
                     <h3 class="card-title">{{ card.title }}</h3>
@@ -119,7 +120,7 @@ interface DashboardCard {
                     class="quick-action-btn"
                     (click)="onQuickAction(action)"
                     [disabled]="action.disabled">
-                    <div class="action-icon" [innerHTML]="action.icon"></div>
+                    <div class="action-icon" [innerHTML]="getSafeHtml(action.icon)"></div>
                     <span class="action-label">{{ action.label }}</span>
                   </button>
                 }
@@ -138,7 +139,7 @@ interface DashboardCard {
                 @for (activity of recentActivities(); track activity.id) {
                   <div class="activity-item">
                     <div class="activity-icon">
-                      <div [innerHTML]="activity.icon"></div>
+                      <div [innerHTML]="getSafeHtml(activity.icon)"></div>
                     </div>
                     <div class="activity-details">
                       <p class="activity-text">{{ activity.text }}</p>
@@ -159,6 +160,7 @@ export class DashboardComponent implements OnInit {
   private klassciApi = inject(KlassciApiService);
   private roleService = inject(RoleService);
   private router = inject(Router);
+  private sanitizer = inject(DomSanitizer);
 
   // State signals
   currentUser = signal<KlassciUser | null>(null);
@@ -515,5 +517,10 @@ export class DashboardComponent implements OnInit {
     this.klassciApi.logout().subscribe(() => {
       this.router.navigate(['/auth/login']);
     });
+  }
+
+  // Safe HTML sanitization method
+  getSafeHtml(html: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(html);
   }
 }

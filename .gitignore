@@ -18,6 +18,9 @@ public/build/
 .env.development
 .env.*.local
 
+# Angular environment files
+lms-klassci-frontend/src/environments/environment.ts
+
 # IDE files
 .vscode/
 .idea/
