@@ -3,7 +3,6 @@ import { HttpInterceptorFn, HttpRequest, HttpEvent, HttpErrorResponse } from '@a
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, filter, take, switchMap, finalize } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { KlassciApiService } from '@core/services/klassci-api.service';
 
 // Global state for refresh token handling
 let isRefreshing = false;
@@ -11,9 +10,8 @@ let refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
 export const AuthInterceptor: HttpInterceptorFn = (request: HttpRequest<any>, next) => {
   const router = inject(Router);
-  const klassciApi = inject(KlassciApiService);
-  // Ajouter le token d'auth si disponible
-  const authToken = klassciApi.getAuthToken();
+  // Ajouter le token d'auth si disponible (éviter la dépendance circulaire)
+  const authToken = localStorage.getItem('klassci_token');
 
   if (authToken && isKlassciRequest(request)) {
     request = addTokenToRequest(request, authToken);
