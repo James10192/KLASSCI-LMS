@@ -20,7 +20,7 @@ import { KlassciApiService, KlassciClasse } from '@core/services/klassci-api.ser
       <div class="classes-management-container">
         <!-- Header -->
         <div class="header-section">
-          <lg-liquid-glass-card variant="header" [opacity]="10" blur="md">
+          <lg-liquid-glass-card variant="large" [opacity]="10" blur="md">
             <div class="header-content">
               <h1 class="page-title">Gestion des Classes</h1>
               <p class="page-subtitle">Administration des classes et formations</p>
@@ -45,7 +45,7 @@ import { KlassciApiService, KlassciClasse } from '@core/services/klassci-api.ser
         <!-- Stats Overview -->
         <div class="stats-section">
           <div class="stats-grid">
-            <lg-liquid-glass-card variant="small" [opacity]="8" blur="sm">
+            <lg-liquid-glass-card variant="compact" [opacity]="8" blur="sm">
               <div class="stat-content">
                 <div class="stat-icon blue">
                   <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -59,7 +59,7 @@ import { KlassciApiService, KlassciClasse } from '@core/services/klassci-api.ser
               </div>
             </lg-liquid-glass-card>
 
-            <lg-liquid-glass-card variant="small" [opacity]="8" blur="sm">
+            <lg-liquid-glass-card variant="compact" [opacity]="8" blur="sm">
               <div class="stat-content">
                 <div class="stat-icon green">
                   <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -73,7 +73,7 @@ import { KlassciApiService, KlassciClasse } from '@core/services/klassci-api.ser
               </div>
             </lg-liquid-glass-card>
 
-            <lg-liquid-glass-card variant="small" [opacity]="8" blur="sm">
+            <lg-liquid-glass-card variant="compact" [opacity]="8" blur="sm">
               <div class="stat-content">
                 <div class="stat-icon purple">
                   <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -171,7 +171,7 @@ import { KlassciApiService, KlassciClasse } from '@core/services/klassci-api.ser
         @if (showCreateModal) {
           <div class="modal-overlay" (click)="showCreateModal = false">
             <div class="modal-content" (click)="$event.stopPropagation()">
-              <lg-liquid-glass-card variant="modal" [opacity]="20" blur="xl">
+              <lg-liquid-glass-card variant="large" [opacity]="20" blur="xl">
                 <div class="modal-body">
                   <h3 class="modal-title">Créer une nouvelle classe</h3>
                   <p class="modal-subtitle">Cette fonctionnalité sera bientôt disponible</p>
