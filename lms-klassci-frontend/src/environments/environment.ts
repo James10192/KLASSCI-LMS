@@ -1,7 +1,7 @@
 export const environment = {
   production: false,
-  klassciApiUrl: 'http://localhost:8000/api',
-  klassciBaseUrl: 'http://localhost:8000',
+  klassciApiUrl: 'http://127.0.0.1:8000/api',
+  klassciBaseUrl: 'http://127.0.0.1:8000',
   appName: 'LMS KLASSCI',
   version: '1.0.0',
   enableLogging: true,

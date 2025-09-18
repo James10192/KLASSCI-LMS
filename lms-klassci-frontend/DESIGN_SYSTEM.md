@@ -185,6 +185,94 @@ background: linear-gradient(135deg, #ff6b47, #ff8a65);
 3. Valider sur différents écrans et thèmes
 4. Documenter les changements
 
+## 👥 Système de Rôles et Permissions
+
+### Équivalence des Rôles
+
+Le LMS KLASSCI implémente un système d'équivalence des rôles pour garantir une expérience utilisateur cohérente :
+
+#### **Coordinateur ≡ SuperAdmin**
+Les rôles `coordinateur` et `superAdmin` sont **strictement équivalents** dans le LMS :
+- **Mêmes permissions** : Accès complet à toutes les fonctionnalités d'administration
+- **Même interface** : Dashboard identique et navigation unifiée
+- **Même redirection** : Dirigés vers le même espace après connexion
+- **Interchangeables** : Les guards Angular traitent ces rôles comme identiques
+
+#### **Permissions par Rôle**
+
+**Coordinateur/SuperAdmin :**
+- ✅ Voir tous les cours et classes
+- ✅ Gérer les évaluations
+- ✅ Voir tous les étudiants
+- ✅ Gérer les emplois du temps
+- ✅ Accès administration
+- ✅ Générer des rapports
+- ✅ Gérer les utilisateurs
+- ✅ Voir les statistiques
+
+**Enseignant :**
+- ✅ Voir ses propres cours
+- ✅ Gérer ses évaluations
+- ✅ Voir les étudiants de ses cours
+- ✅ Enregistrer les présences
+- ✅ Générer des rapports de cours
+
+**Étudiant :**
+- ✅ Voir ses cours
+- ✅ Voir ses notes
+- ✅ Accéder au chat
+- ✅ Voir son emploi du temps
+
+### Implementation Technique
+
+#### **Frontend Angular**
+```typescript
+// Service de gestion des rôles
+@Injectable({ providedIn: 'root' })
+export class RoleService {
+  isCoordinatorEquivalent(role: string): boolean {
+    return ['coordinateur', 'superAdmin'].includes(role);
+  }
+
+  hasAnyRole(userRole: string, requiredRoles: string[]): boolean {
+    // Traite automatiquement l'équivalence coordinateur/superAdmin
+  }
+}
+
+// Guard avec équivalence
+@Injectable({ providedIn: 'root' })
+export class RoleGuard {
+  canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
+    const hasRole = this.roleService.hasAnyRole(user.role, requiredRoles);
+    return hasRole;
+  }
+}
+```
+
+#### **Backend Laravel**
+```php
+// Helper de gestion des rôles
+class RoleHelper {
+    const COORDINATOR_EQUIVALENT_ROLES = ['coordinateur', 'superAdmin'];
+
+    public static function isCoordinatorEquivalent(string $role): bool {
+        return in_array($role, self::COORDINATOR_EQUIVALENT_ROLES);
+    }
+
+    public static function hasAnyRole(string $userRole, array $requiredRoles): bool {
+        // Logique d'équivalence automatique
+    }
+}
+```
+
+### Avantages de cette Approche
+
+1. **Simplicité** : Un seul dashboard pour les administrateurs
+2. **Maintenance** : Code unifié, moins de duplication
+3. **Sécurité** : Permissions centralisées et cohérentes
+4. **Évolutivité** : Facile d'ajouter de nouveaux rôles équivalents
+5. **UX** : Expérience utilisateur fluide et prévisible
+
 ## 🎛️ Angular Material Theming
 
 ### Configuration du Thème

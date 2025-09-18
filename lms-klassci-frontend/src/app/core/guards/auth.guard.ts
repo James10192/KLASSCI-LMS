@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { CanActivate, CanActivateChild, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable, map, take } from 'rxjs';
 import { KlassciApiService } from '@core/services/klassci-api.service';
+import { RoleService } from '@core/services/role.service';
 
 @Injectable({
   providedIn: 'root'
@@ -57,6 +58,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
 })
 export class RoleGuard implements CanActivate {
   private klassciApi = inject(KlassciApiService);
+  private roleService = inject(RoleService);
   private router = inject(Router);
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean> | boolean {
@@ -74,7 +76,8 @@ export class RoleGuard implements CanActivate {
           return false;
         }
 
-        const hasRole = requiredRoles.includes(user.role);
+        // Utiliser le service de rôles pour vérifier l'équivalence coordinateur/superAdmin
+        const hasRole = this.roleService.hasAnyRole(user.role, requiredRoles);
         if (!hasRole) {
           this.router.navigate(['/access-denied']);
           return false;

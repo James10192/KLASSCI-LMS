@@ -52,10 +52,11 @@ export const routes: Routes = [
   },
 
   // Administration (coordinateurs et admins)
+  // Note: coordinateur et superAdmin ont exactement les mêmes permissions
   {
     path: 'admin',
     canActivate: [AuthGuard, RoleGuard],
-    data: { roles: ['coordinateur', 'super_admin'] },
+    data: { roles: ['coordinateur', 'superAdmin'] },
     loadChildren: () => import('./features/admin/admin.routes').then(m => m.adminRoutes)
   },
 

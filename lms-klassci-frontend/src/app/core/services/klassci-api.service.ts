@@ -101,11 +101,11 @@ export class KlassciApiService {
   }
 
   // Authentification
-  login(email: string, password: string): Observable<KlassciAuthResponse> {
+  login(username: string, password: string): Observable<KlassciAuthResponse> {
     this.isLoadingSubject.next(true);
 
     return this.http.post<KlassciAuthResponse>(`${this.baseUrl}/lms/auth/login`, {
-      email,
+      username,
       password
     }).pipe(
       tap(response => {

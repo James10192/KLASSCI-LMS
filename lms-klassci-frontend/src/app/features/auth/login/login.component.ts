@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { LiquidGlassBackgroundComponent } from '@shared/components/liquid-glass-background/liquid-glass-background.component';
 import { LiquidGlassCardComponent } from '@shared/components/liquid-glass-card/liquid-glass-card.component';
 import { KlassciApiService } from '@core/services/klassci-api.service';
+import { RoleService } from '@core/services/role.service';
 
 @Component({
   selector: 'lg-login',
@@ -44,28 +45,27 @@ import { KlassciApiService } from '@core/services/klassci-api.service';
 
           <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
 
-            <!-- Email -->
+            <!-- Email ou nom d'utilisateur -->
             <div class="form-group">
-              <label for="email" class="form-label">Adresse email</label>
+              <label for="username" class="form-label">Email ou nom d'utilisateur</label>
               <div class="input-container">
                 <input
-                  id="email"
-                  type="email"
-                  formControlName="email"
+                  id="username"
+                  type="text"
+                  formControlName="username"
                   class="form-input"
-                  [class.error]="emailErrors()"
-                  placeholder="votre@email.com"
-                  autocomplete="email"
+                  [class.error]="usernameErrors()"
+                  placeholder="votre@email.com ou nom d'utilisateur"
+                  autocomplete="username"
                   required>
                 <div class="input-icon">
                   <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
-                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
                   </svg>
                 </div>
               </div>
-              <div class="form-error" *ngIf="emailErrors()">
-                {{ emailErrors() }}
+              <div class="form-error" *ngIf="usernameErrors()">
+                {{ usernameErrors() }}
               </div>
             </div>
 
@@ -151,6 +151,7 @@ import { KlassciApiService } from '@core/services/klassci-api.service';
 export class LoginComponent implements OnInit {
   private fb = inject(FormBuilder);
   private klassciApi = inject(KlassciApiService);
+  private roleService = inject(RoleService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private snackBar = inject(MatSnackBar);
@@ -164,7 +165,7 @@ export class LoginComponent implements OnInit {
   private returnUrl = '/dashboard';
 
   // Computed error messages
-  emailErrors = signal('');
+  usernameErrors = signal('');
   passwordErrors = signal('');
 
   ngOnInit() {
@@ -175,15 +176,15 @@ export class LoginComponent implements OnInit {
 
   private initForm() {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      username: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       rememberMe: [false]
     });
   }
 
   private setupValidationMessages() {
-    this.loginForm.get('email')?.statusChanges.subscribe(() => {
-      this.updateEmailErrors();
+    this.loginForm.get('username')?.statusChanges.subscribe(() => {
+      this.updateUsernameErrors();
     });
 
     this.loginForm.get('password')?.statusChanges.subscribe(() => {
@@ -191,16 +192,14 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  private updateEmailErrors() {
-    const emailControl = this.loginForm.get('email');
-    if (emailControl?.invalid && emailControl?.touched) {
-      if (emailControl.errors?.['required']) {
-        this.emailErrors.set('L\'adresse email est requise');
-      } else if (emailControl.errors?.['email']) {
-        this.emailErrors.set('Veuillez saisir une adresse email valide');
+  private updateUsernameErrors() {
+    const usernameControl = this.loginForm.get('username');
+    if (usernameControl?.invalid && usernameControl?.touched) {
+      if (usernameControl.errors?.['required']) {
+        this.usernameErrors.set('L\'email ou nom d\'utilisateur est requis');
       }
     } else {
-      this.emailErrors.set('');
+      this.usernameErrors.set('');
     }
   }
 
@@ -221,6 +220,17 @@ export class LoginComponent implements OnInit {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
   }
 
+  private getRedirectUrlForUser(userRole: string): string {
+    // Si une URL de retour spécifique est définie, l'utiliser
+    const returnUrl = this.route.snapshot.queryParams['returnUrl'];
+    if (returnUrl && returnUrl !== '/dashboard') {
+      return returnUrl;
+    }
+
+    // Sinon, utiliser la logique de redirection basée sur le rôle
+    return this.roleService.getDefaultRedirectRoute(userRole);
+  }
+
   togglePassword() {
     this.showPassword.set(!this.showPassword());
   }
@@ -230,22 +240,28 @@ export class LoginComponent implements OnInit {
       this.isLoading.set(true);
       this.globalError.set('');
 
-      const { email, password } = this.loginForm.value;
+      const { username, password } = this.loginForm.value;
 
-      this.klassciApi.login(email, password).subscribe({
+      this.klassciApi.login(username, password).subscribe({
         next: (response) => {
           if (response.success) {
-            this.snackBar.open('Connexion réussie !', '', {
+            const userRole = response.data.user.role;
+            const redirectUrl = this.getRedirectUrlForUser(userRole);
+
+            // Message personnalisé selon le rôle
+            const roleDisplayName = this.roleService.getRoleDisplayName(userRole);
+            this.snackBar.open(`Connexion réussie ! Bienvenue ${roleDisplayName}`, '', {
               duration: 3000,
               panelClass: ['success-snackbar']
             });
-            this.router.navigateByUrl(this.returnUrl);
+
+            this.router.navigateByUrl(redirectUrl);
           }
         },
         error: (error) => {
           this.isLoading.set(false);
           this.globalError.set(
-            error.error || 'Email ou mot de passe incorrect'
+            error.error || 'Identifiants incorrects'
           );
         },
         complete: () => {
@@ -257,7 +273,7 @@ export class LoginComponent implements OnInit {
       Object.keys(this.loginForm.controls).forEach(key => {
         this.loginForm.get(key)?.markAsTouched();
       });
-      this.updateEmailErrors();
+      this.updateUsernameErrors();
       this.updatePasswordErrors();
     }
   }
