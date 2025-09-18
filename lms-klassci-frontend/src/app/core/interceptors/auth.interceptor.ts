@@ -42,7 +42,7 @@ export const AuthInterceptor: HttpInterceptorFn = (request: HttpRequest<any>, ne
 };
 
 function isKlassciRequest(request: HttpRequest<any>): boolean {
-  return request.url.includes('/api/lms');
+  return request.url.includes('/api/');
 }
 
 function addTokenToRequest(request: HttpRequest<any>, token: string): HttpRequest<any> {
