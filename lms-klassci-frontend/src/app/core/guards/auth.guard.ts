@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { CanActivate, CanActivateChild, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Observable, map, take } from 'rxjs';
+import { Observable, map, take, filter, catchError, of, timeout, switchMap } from 'rxjs';
 import { KlassciApiService } from '@core/services/klassci-api.service';
 import { RoleService } from '@core/services/role.service';
 
@@ -38,22 +38,20 @@ export class AuthGuard implements CanActivate, CanActivateChild {
 
     console.log('✅ AuthGuard: Token found, checking user state');
 
-    // Vérification asynchrone de l'utilisateur
-    return this.klassciApi.currentUser$.pipe(
-      take(1),
+    // Essayer de récupérer l'utilisateur depuis le serveur avec le token
+    return this.klassciApi.getCurrentUser().pipe(
       map(user => {
-        if (user) {
-          console.log('✅ AuthGuard: User authenticated:', {
-            id: user.id,
-            role: user.role,
-            nom: user.nom
-          });
-          return true;
-        } else {
-          console.log('❌ AuthGuard: No user in state, redirecting to login');
-          this.redirectToLogin(url);
-          return false;
-        }
+        console.log('✅ AuthGuard: User authenticated from server:', {
+          id: user.id,
+          role: user.role,
+          nom: user.nom
+        });
+        return true;
+      }),
+      catchError(() => {
+        console.log('❌ AuthGuard: Failed to get user from server, redirecting to login');
+        this.redirectToLogin(url);
+        return of(false);
       })
     );
   }
