@@ -248,6 +248,13 @@ export class LoginComponent implements OnInit {
             const userRole = response.data.user.role;
             const redirectUrl = this.getRedirectUrlForUser(userRole);
 
+            // Debug: Log pour diagnostiquer la redirection
+            console.log('Login successful:', {
+              userRole,
+              redirectUrl,
+              user: response.data.user
+            });
+
             // Message personnalisé selon le rôle
             const roleDisplayName = this.roleService.getRoleDisplayName(userRole);
             this.snackBar.open(`Connexion réussie ! Bienvenue ${roleDisplayName}`, '', {
@@ -255,7 +262,14 @@ export class LoginComponent implements OnInit {
               panelClass: ['success-snackbar']
             });
 
-            this.router.navigateByUrl(redirectUrl);
+            // Redirection avec un petit délai pour permettre à l'authentification de se propager
+            setTimeout(() => {
+              console.log('Attempting navigation to:', redirectUrl);
+              this.router.navigateByUrl(redirectUrl).then(
+                (success) => console.log('Navigation success:', success),
+                (error) => console.error('Navigation error:', error)
+              );
+            }, 100);
           }
         },
         error: (error) => {

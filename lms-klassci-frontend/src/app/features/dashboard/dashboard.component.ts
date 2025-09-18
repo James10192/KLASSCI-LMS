@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { LiquidGlassBackgroundComponent } from '@shared/components/liquid-glass-background/liquid-glass-background.component';
 import { LiquidGlassCardComponent } from '@shared/components/liquid-glass-card/liquid-glass-card.component';
 import { KlassciApiService, KlassciUser } from '@core/services/klassci-api.service';
+import { RoleService } from '@core/services/role.service';
 
 interface DashboardCard {
   id: string;
@@ -156,6 +157,7 @@ interface DashboardCard {
 })
 export class DashboardComponent implements OnInit {
   private klassciApi = inject(KlassciApiService);
+  private roleService = inject(RoleService);
   private router = inject(Router);
 
   // State signals
@@ -170,13 +172,11 @@ export class DashboardComponent implements OnInit {
     const user = this.currentUser();
     if (!user) return 'default';
 
-    switch (user.role) {
-      case 'enseignant': return 'educator';
-      case 'etudiant': return 'student';
-      case 'coordinateur':
-      case 'super_admin': return 'admin';
-      default: return 'default';
-    }
+    if (this.roleService.isTeacher(user.role)) return 'educator';
+    if (this.roleService.isStudent(user.role)) return 'student';
+    if (this.roleService.isCoordinatorEquivalent(user.role)) return 'admin';
+
+    return 'default';
   });
 
   ngOnInit() {
@@ -199,12 +199,12 @@ export class DashboardComponent implements OnInit {
     const user = this.currentUser();
     if (!user) return;
 
-    // Données de base selon le rôle
-    if (user.role === 'enseignant') {
+    // Données de base selon le rôle - utilise RoleService pour l'équivalence
+    if (this.roleService.isTeacher(user.role)) {
       this.loadTeacherData();
-    } else if (user.role === 'etudiant') {
+    } else if (this.roleService.isStudent(user.role)) {
       this.loadStudentData();
-    } else if (user.role === 'coordinateur' || user.role === 'super_admin') {
+    } else if (this.roleService.isCoordinatorEquivalent(user.role)) {
       this.loadAdminData();
     }
   }
@@ -364,10 +364,10 @@ export class DashboardComponent implements OnInit {
   }
 
   private updateDashboardForRole(role: string) {
-    // Actions rapides selon le rôle
+    // Actions rapides selon le rôle - utilise RoleService pour l'équivalence
     let actions: any[] = [];
 
-    if (role === 'enseignant') {
+    if (this.roleService.isTeacher(role)) {
       actions = [
         {
           id: 'new-evaluation',
@@ -382,7 +382,7 @@ export class DashboardComponent implements OnInit {
           disabled: false
         }
       ];
-    } else if (role === 'etudiant') {
+    } else if (this.roleService.isStudent(role)) {
       actions = [
         {
           id: 'view-schedule',
@@ -394,6 +394,21 @@ export class DashboardComponent implements OnInit {
           id: 'view-grades',
           label: 'Mes notes',
           icon: '<svg width="24" height="24" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm0 4a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1V8zm8 0a1 1 0 011-1h4a1 1 0 011 1v2a1 1 0 01-1 1h-4a1 1 0 01-1-1V8z" clip-rule="evenodd"></path></svg>',
+          disabled: false
+        }
+      ];
+    } else if (this.roleService.isCoordinatorEquivalent(role)) {
+      actions = [
+        {
+          id: 'manage-users',
+          label: 'Gérer les utilisateurs',
+          icon: '<svg width="24" height="24" fill="currentColor" viewBox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"></path></svg>',
+          disabled: false
+        },
+        {
+          id: 'view-reports',
+          label: 'Rapports et statistiques',
+          icon: '<svg width="24" height="24" fill="currentColor" viewBox="0 0 20 20"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"></path></svg>',
           disabled: false
         }
       ];
@@ -433,18 +448,15 @@ export class DashboardComponent implements OnInit {
     const user = this.currentUser();
     if (!user) return 'Bienvenue sur votre plateforme d\'apprentissage';
 
-    switch (user.role) {
-      case 'enseignant':
-        return 'Gérez vos cours et évaluations facilement';
-      case 'etudiant':
-        return 'Suivez vos cours et consultez vos notes';
-      case 'coordinateur':
-        return 'Supervisez l\'activité pédagogique';
-      case 'super_admin':
-        return 'Administration complète de la plateforme';
-      default:
-        return 'Bienvenue sur votre plateforme d\'apprentissage';
+    if (this.roleService.isTeacher(user.role)) {
+      return 'Gérez vos cours et évaluations facilement';
+    } else if (this.roleService.isStudent(user.role)) {
+      return 'Suivez vos cours et consultez vos notes';
+    } else if (this.roleService.isCoordinatorEquivalent(user.role)) {
+      return 'Administration complète de la plateforme - Coordinateur/SuperAdmin';
     }
+
+    return 'Bienvenue sur votre plateforme d\'apprentissage';
   }
 
   getInitials(): string {
@@ -485,6 +497,12 @@ export class DashboardComponent implements OnInit {
         break;
       case 'view-grades':
         this.router.navigate(['/grades']);
+        break;
+      case 'manage-users':
+        this.router.navigate(['/admin/users']);
+        break;
+      case 'view-reports':
+        this.router.navigate(['/admin/reports']);
         break;
     }
   }
