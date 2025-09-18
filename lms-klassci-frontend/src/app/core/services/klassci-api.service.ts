@@ -40,6 +40,10 @@ export interface KlassciClasse {
   niveau_id: number;
   nb_etudiants: number;
   is_active: boolean;
+  statistiques?: {
+    nb_etudiants: number;
+    nb_matieres: number;
+  };
 }
 
 export interface KlassciEtudiant {
@@ -173,6 +177,33 @@ export class KlassciApiService {
     return this.http.get<{success: boolean, data: KlassciEtudiant[]}>(`${this.baseUrl}/lms/classes/${classeId}/etudiants`, { params }).pipe(
       map(response => response.data),
       catchError(error => this.handleError('Erreur récupération étudiants', error))
+    );
+  }
+
+  // Enseignants
+  getEnseignants(): Observable<any[]> {
+    return this.http.get<{success: boolean, data: any[]}>(`${this.baseUrl}/lms/enseignants`).pipe(
+      map(response => response.data),
+      shareReplay(1),
+      catchError(error => this.handleError('Erreur récupération enseignants', error))
+    );
+  }
+
+  // Filières
+  getFilieres(): Observable<any[]> {
+    return this.http.get<{success: boolean, data: any[]}>(`${this.baseUrl}/lms/filieres`).pipe(
+      map(response => response.data),
+      shareReplay(1),
+      catchError(error => this.handleError('Erreur récupération filières', error))
+    );
+  }
+
+  // Niveaux d'études
+  getNiveauxEtudes(): Observable<any[]> {
+    return this.http.get<{success: boolean, data: any[]}>(`${this.baseUrl}/lms/niveaux-etudes`).pipe(
+      map(response => response.data),
+      shareReplay(1),
+      catchError(error => this.handleError('Erreur récupération niveaux d\'études', error))
     );
   }
 

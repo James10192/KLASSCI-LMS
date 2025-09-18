@@ -328,11 +328,46 @@ export class DashboardComponent implements OnInit {
         color: 'purple',
         link: '/admin/classes',
         loading: true
+      },
+      {
+        id: 'matieres',
+        title: 'Matières',
+        subtitle: 'Total actives',
+        value: 0,
+        icon: '<svg width="24" height="24" fill="currentColor" viewBox="0 0 20 20"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"></path></svg>',
+        color: 'orange',
+        link: '/admin/matieres',
+        loading: true
+      },
+      {
+        id: 'filieres',
+        title: 'Filières',
+        subtitle: 'Total disponibles',
+        value: 0,
+        icon: '<svg width="24" height="24" fill="currentColor" viewBox="0 0 20 20"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"></path></svg>',
+        color: 'blue',
+        link: '/admin/filieres',
+        loading: true
+      },
+      {
+        id: 'niveaux',
+        title: 'Niveaux',
+        subtitle: 'Niveaux d\'études',
+        value: 0,
+        icon: '<svg width="24" height="24" fill="currentColor" viewBox="0 0 20 20"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm0 4a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1V8zm8 0a1 1 0 011-1h4a1 1 0 011 1v2a1 1 0 01-1 1h-4a1 1 0 01-1-1V8z"></path></svg>',
+        color: 'green',
+        link: '/admin/niveaux',
+        loading: true
       }
     ];
 
     this.dashboardCards.set(cards);
     this.loadClassesData();
+    this.loadStudentsData();
+    this.loadTeachersData();
+    this.loadMatieresData();
+    this.loadFilieresData();
+    this.loadNiveauxData();
   }
 
   private loadClassesData() {
@@ -353,6 +388,62 @@ export class DashboardComponent implements OnInit {
       },
       error: () => {
         this.updateCardValue('matieres', 0);
+      }
+    });
+  }
+
+  private loadStudentsData() {
+    // Pour les étudiants, on compte le total depuis les classes
+    this.klassciApi.getClasses().subscribe({
+      next: (classes) => {
+        const totalStudents = classes.reduce((total, classe) =>
+          total + (classe.statistiques?.nb_etudiants || 0), 0);
+        this.updateCardValue('students', totalStudents);
+        console.log('📊 Dashboard - Students loaded:', totalStudents);
+      },
+      error: (error) => {
+        console.error('❌ Dashboard - Failed to load students:', error);
+        this.updateCardValue('students', 0);
+      }
+    });
+  }
+
+  private loadTeachersData() {
+    // Utiliser le nouvel endpoint dédié aux enseignants
+    this.klassciApi.getEnseignants().subscribe({
+      next: (enseignants) => {
+        this.updateCardValue('teachers', enseignants.length);
+        console.log('📊 Dashboard - Teachers loaded:', enseignants.length);
+      },
+      error: (error) => {
+        console.error('❌ Dashboard - Failed to load teachers:', error);
+        this.updateCardValue('teachers', 0);
+      }
+    });
+  }
+
+  private loadFilieresData() {
+    this.klassciApi.getFilieres().subscribe({
+      next: (filieres) => {
+        this.updateCardValue('filieres', filieres.length);
+        console.log('📊 Dashboard - Filières loaded:', filieres.length);
+      },
+      error: (error) => {
+        console.error('❌ Dashboard - Failed to load filières:', error);
+        this.updateCardValue('filieres', 0);
+      }
+    });
+  }
+
+  private loadNiveauxData() {
+    this.klassciApi.getNiveauxEtudes().subscribe({
+      next: (niveaux) => {
+        this.updateCardValue('niveaux', niveaux.length);
+        console.log('📊 Dashboard - Niveaux loaded:', niveaux.length);
+      },
+      error: (error) => {
+        console.error('❌ Dashboard - Failed to load niveaux:', error);
+        this.updateCardValue('niveaux', 0);
       }
     });
   }
