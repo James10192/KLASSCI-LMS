@@ -4,6 +4,7 @@ import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
 import { LiquidGlassBackgroundComponent } from '@shared/components/liquid-glass-background/liquid-glass-background.component';
+import { LiquidGlassCardComponent } from '@shared/components/liquid-glass-card/liquid-glass-card.component';
 import { KlassciApiService } from '@core/services/klassci-api.service';
 
 @Component({
@@ -12,7 +13,8 @@ import { KlassciApiService } from '@core/services/klassci-api.service';
   imports: [
     CommonModule,
     RouterOutlet,
-    LiquidGlassBackgroundComponent
+    LiquidGlassBackgroundComponent,
+    LiquidGlassCardComponent
   ],
   template: `
     <lg-liquid-glass-background

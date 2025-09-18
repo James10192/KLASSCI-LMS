@@ -1,4 +1,4 @@
-import { Component, Input, signal, computed, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
+import { Component, signal, computed, ChangeDetectionStrategy, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatRippleModule } from '@angular/material/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -58,17 +58,17 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   }
 })
 export class LiquidGlassCardComponent {
-  @Input() variant = signal<'default' | 'compact' | 'large' | 'dashboard' | 'course' | 'evaluation'>('default');
-  @Input() blur = signal<'sm' | 'md' | 'lg' | 'xl'>('md');
-  @Input() opacity = signal(10); // 0-100
-  @Input() interactive = signal(false);
-  @Input() loading = signal(false);
-  @Input() disabled = signal(false);
-  @Input() enableLiquidEffect = signal(true);
-  @Input() ariaLabel = signal('');
-  @Input() elevation = signal<'low' | 'medium' | 'high'>('medium');
+  variant = input<'default' | 'compact' | 'large' | 'dashboard' | 'course' | 'evaluation'>('default');
+  blur = input<'sm' | 'md' | 'lg' | 'xl'>('md');
+  opacity = input(10); // 0-100
+  interactive = input(false);
+  loading = input(false);
+  disabled = input(false);
+  enableLiquidEffect = input(true);
+  ariaLabel = input('');
+  elevation = input<'low' | 'medium' | 'high'>('medium');
 
-  @Output() cardClick = new EventEmitter<void>();
+  cardClick = output<void>();
 
   // Computed properties pour optimisation performance
   blurIntensity = computed(() => {

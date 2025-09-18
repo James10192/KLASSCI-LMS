@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, signal, computed, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, signal, computed, ChangeDetectionStrategy, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 interface FloatingOrb {
@@ -19,13 +19,13 @@ interface FloatingOrb {
       class="liquid-glass-background"
       [class]="backgroundClasses()"
       [attr.data-variant]="variant()"
-      [attr.data-performance-mode]="enableAdvancedEffects() ? 'high' : 'low'"
+      [attr.data-performance-mode]="actualAdvancedEffects() ? 'high' : 'low'"
     >
       <!-- Liquid distortion layer (true liquid glass effect) -->
       <div
         class="distortion-layer"
         [style.filter]="distortionFilter()"
-        *ngIf="enableAdvancedEffects()">
+        *ngIf="actualAdvancedEffects()">
         <div class="distortion-mesh"></div>
       </div>
 
@@ -57,17 +57,42 @@ interface FloatingOrb {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LiquidGlassBackgroundComponent implements OnInit {
-  @Input() variant = signal<'default' | 'dark' | 'educator' | 'student' | 'admin'>('default');
-  @Input() enableAdvancedEffects = signal(true);
-  @Input() blurMode = signal<'backdrop' | 'fallback'>('backdrop');
+  variant = input<'default' | 'dark' | 'educator' | 'student' | 'admin'>('default');
+  enableAdvancedEffects = input(true);
+  blurMode = input<'backdrop' | 'fallback'>('backdrop');
 
+  // Internal state signals
   orbs = signal<FloatingOrb[]>([]);
   distortionFilter = signal('');
+
+  // Computed state based on inputs and environment
+  actualBlurMode = computed(() => {
+    // Check if backdrop-filter is supported
+    if (typeof window !== 'undefined') {
+      const testElement = document.createElement('div');
+      testElement.style.backdropFilter = 'blur(1px)';
+      if (!testElement.style.backdropFilter) {
+        return 'fallback';
+      }
+    }
+    return this.blurMode();
+  });
+
+  actualAdvancedEffects = computed(() => {
+    // Check device memory for performance mode
+    if (typeof window !== 'undefined' && 'deviceMemory' in navigator) {
+      const deviceMemory = (navigator as any).deviceMemory;
+      if (deviceMemory && deviceMemory < 4) {
+        return false;
+      }
+    }
+    return this.enableAdvancedEffects();
+  });
 
   // Computed properties pour optimisation
   backgroundClasses = computed(() => {
     const variant = this.variant();
-    const effects = this.enableAdvancedEffects() ? 'advanced' : 'basic';
+    const effects = this.actualAdvancedEffects() ? 'advanced' : 'basic';
     return `variant-${variant} effects-${effects}`;
   });
 
@@ -123,14 +148,14 @@ export class LiquidGlassBackgroundComponent implements OnInit {
     // Détection Firefox pour fallback
     const isFirefox = navigator.userAgent.includes('Firefox');
     if (isFirefox) {
-      this.blurMode.set('fallback');
+      // Input signals are read-only, use computed actualBlurMode instead
     }
 
     // Test support backdrop-filter
     const testEl = document.createElement('div');
     testEl.style.backdropFilter = 'blur(1px)';
     if (!testEl.style.backdropFilter) {
-      this.blurMode.set('fallback');
+      // Input signals are read-only, use computed actualBlurMode instead
     }
   }
 
@@ -141,7 +166,7 @@ export class LiquidGlassBackgroundComponent implements OnInit {
     const isLowPower = deviceMemory < 4 || isMobile;
 
     if (isLowPower) {
-      this.enableAdvancedEffects.set(false);
+      // Input signals are read-only, use computed actualAdvancedEffects instead
     }
   }
 }

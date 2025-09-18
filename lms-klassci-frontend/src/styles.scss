@@ -1,10 +1,10 @@
+// Import Angular Material theme (v17+ uses @use) - MUST be first
+@use '@angular/material' as mat;
+
 // Imports Tailwind CSS
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
-
-// Import Angular Material theme (v17+ uses @use)
-@use '@angular/material' as mat;
 
 // Variables globales liquid glass
 :root {

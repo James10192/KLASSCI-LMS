@@ -162,10 +162,17 @@ temp/
 /out-tsc
 /bazel-out
 
+# Angular cache and CLI
+.angular/
+**/.angular/
+
 # Node
 /node_modules
+**/node_modules
 npm-debug.log
 yarn-error.log
+pnpm-lock.yaml
+**/pnpm-lock.yaml
 
 # IDEs and editors
 .idea/
