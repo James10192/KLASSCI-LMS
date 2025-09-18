@@ -221,14 +221,41 @@ export class LoginComponent implements OnInit {
   }
 
   private getRedirectUrlForUser(userRole: string): string {
-    // Si une URL de retour spécifique est définie, l'utiliser
+    // Récupérer l'URL de retour des paramètres de query
     const returnUrl = this.route.snapshot.queryParams['returnUrl'];
-    if (returnUrl && returnUrl !== '/dashboard') {
-      return returnUrl;
+
+    // Valider et nettoyer l'URL de retour
+    if (returnUrl && this.isValidReturnUrl(returnUrl)) {
+      return decodeURIComponent(returnUrl);
     }
 
     // Sinon, utiliser la logique de redirection basée sur le rôle
     return this.roleService.getDefaultRedirectRoute(userRole);
+  }
+
+  private isValidReturnUrl(url: string): boolean {
+    try {
+      const decodedUrl = decodeURIComponent(url);
+
+      // Rejeter les URLs qui pointent vers la page de login (évite les boucles)
+      if (decodedUrl.includes('/auth/login')) {
+        console.log('Rejected returnUrl (login loop):', decodedUrl);
+        return false;
+      }
+
+      // Rejeter les URLs qui ne commencent pas par / (évite les redirections externes)
+      if (!decodedUrl.startsWith('/')) {
+        console.log('Rejected returnUrl (external):', decodedUrl);
+        return false;
+      }
+
+      // Accepter les URLs valides
+      console.log('Valid returnUrl:', decodedUrl);
+      return true;
+    } catch (error) {
+      console.error('Invalid returnUrl format:', url, error);
+      return false;
+    }
   }
 
   togglePassword() {
