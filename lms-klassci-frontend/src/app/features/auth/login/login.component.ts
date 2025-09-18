@@ -1,7 +1,7 @@
 import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, ActivatedRoute, RouterLink } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink, NavigationEnd } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { LiquidGlassBackgroundComponent } from '@shared/components/liquid-glass-background/liquid-glass-background.component';
@@ -291,10 +291,23 @@ export class LoginComponent implements OnInit {
 
             // Redirection avec un petit délai pour permettre à l'authentification de se propager
             setTimeout(() => {
-              console.log('Attempting navigation to:', redirectUrl);
+              console.log('🚀 Attempting navigation to:', redirectUrl);
+
+              // Écouter les événements de navigation pour debug
+              this.router.events.subscribe(event => {
+                console.log('🔄 Router event:', event.constructor.name, event);
+              });
+
               this.router.navigateByUrl(redirectUrl).then(
-                (success) => console.log('Navigation success:', success),
-                (error) => console.error('Navigation error:', error)
+                (success) => {
+                  console.log('✅ Navigation result:', success);
+                  if (success) {
+                    console.log('✅ Successfully navigated to:', this.router.url);
+                  } else {
+                    console.log('❌ Navigation failed, current URL:', this.router.url);
+                  }
+                },
+                (error) => console.error('❌ Navigation error:', error)
               );
             }, 100);
           }
