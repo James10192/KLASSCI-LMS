@@ -1,7 +1,7 @@
 import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { LiquidGlassBackgroundComponent } from '@shared/components/liquid-glass-background/liquid-glass-background.component';
@@ -14,6 +14,7 @@ import { KlassciApiService } from '@core/services/klassci-api.service';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    RouterLink,
     LiquidGlassBackgroundComponent,
     LiquidGlassCardComponent
   ],
