@@ -3,8 +3,8 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-// Import Angular Material theme
-@import '@angular/material/theming';
+// Import Angular Material theme (v17+ uses @use)
+@use '@angular/material' as mat;
 
 // Variables globales liquid glass
 :root {
