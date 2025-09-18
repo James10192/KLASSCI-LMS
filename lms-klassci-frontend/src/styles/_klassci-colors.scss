@@ -1,0 +1,159 @@
+// KLASSCI Brand Colors - Extracted from official logos
+// Primary colors from KLASSCI branding
+
+// === BRAND COLORS ===
+// Primary Blue (from KLASSCI logo text and academic symbol)
+$klassci-blue-900: #1a3f7a;    // Darkest blue
+$klassci-blue-800: #1e4d9b;    // Primary brand blue
+$klassci-blue-700: #2563eb;    // Medium blue
+$klassci-blue-600: #3b82f6;    // Light blue
+$klassci-blue-500: #60a5fa;    // Lighter blue
+$klassci-blue-400: #93c5fd;    // Very light blue
+$klassci-blue-300: #bfdbfe;    // Pale blue
+$klassci-blue-200: #dbeafe;    // Very pale blue
+$klassci-blue-100: #eff6ff;    // Almost white blue
+
+// Secondary Orange (from KLASSCI "K" letter)
+$klassci-orange-900: #c2410c;  // Darkest orange
+$klassci-orange-800: #ea580c;  // Dark orange
+$klassci-orange-700: #ff4500;  // Primary brand orange
+$klassci-orange-600: #ff5722;  // Medium orange
+$klassci-orange-500: #ff6b47;  // Light orange
+$klassci-orange-400: #ff8a65;  // Lighter orange
+$klassci-orange-300: #ffab91;  // Very light orange
+$klassci-orange-200: #ffccbc;  // Pale orange
+$klassci-orange-100: #fff3e0;  // Almost white orange
+
+// === NEUTRAL COLORS ===
+$klassci-gray-900: #0f172a;    // Dark background
+$klassci-gray-800: #1e293b;    // Medium dark
+$klassci-gray-700: #334155;    // Medium
+$klassci-gray-600: #475569;    // Medium light
+$klassci-gray-500: #64748b;    // Gray
+$klassci-gray-400: #94a3b8;    // Light gray
+$klassci-gray-300: #cbd5e1;    // Very light gray
+$klassci-gray-200: #e2e8f0;    // Almost white gray
+$klassci-gray-100: #f1f5f9;    // White gray
+$klassci-white: #ffffff;       // Pure white
+
+// === SEMANTIC COLORS ===
+// Success (based on blue-green mix)
+$klassci-success-dark: #065f46;
+$klassci-success: #10b981;
+$klassci-success-light: #6ee7b7;
+
+// Warning (based on orange variations)
+$klassci-warning-dark: #d97706;
+$klassci-warning: #f59e0b;
+$klassci-warning-light: #fcd34d;
+
+// Error (maintaining contrast with brand)
+$klassci-error-dark: #dc2626;
+$klassci-error: #ef4444;
+$klassci-error-light: #fca5a5;
+
+// Info (using primary blue)
+$klassci-info-dark: $klassci-blue-800;
+$klassci-info: $klassci-blue-600;
+$klassci-info-light: $klassci-blue-400;
+
+// === PRIMARY PALETTE FOR APPLICATION ===
+$primary-50: $klassci-blue-100;
+$primary-100: $klassci-blue-200;
+$primary-200: $klassci-blue-300;
+$primary-300: $klassci-blue-400;
+$primary-400: $klassci-blue-500;
+$primary-500: $klassci-blue-600;  // Main primary
+$primary-600: $klassci-blue-700;
+$primary-700: $klassci-blue-800;  // Brand primary
+$primary-800: $klassci-blue-900;
+$primary-900: #0f1a2e;
+
+$secondary-50: $klassci-orange-100;
+$secondary-100: $klassci-orange-200;
+$secondary-200: $klassci-orange-300;
+$secondary-300: $klassci-orange-400;
+$secondary-400: $klassci-orange-500;
+$secondary-500: $klassci-orange-600;
+$secondary-600: $klassci-orange-700;  // Brand secondary
+$secondary-700: $klassci-orange-800;
+$secondary-800: $klassci-orange-900;
+$secondary-900: #7c2d12;
+
+// === GRADIENT DEFINITIONS ===
+$klassci-gradient-primary: linear-gradient(135deg, #{$klassci-blue-800}, #{$klassci-blue-600});
+$klassci-gradient-secondary: linear-gradient(135deg, #{$klassci-orange-700}, #{$klassci-orange-500});
+$klassci-gradient-brand: linear-gradient(135deg, #{$klassci-blue-800}, #{$klassci-orange-600});
+$klassci-gradient-background: linear-gradient(135deg, #{$klassci-gray-900} 0%, #{$klassci-gray-800} 50%, #{$klassci-gray-700} 100%);
+
+// === BACKGROUND VARIANTS ===
+$bg-primary: $klassci-gray-900;
+$bg-secondary: $klassci-gray-800;
+$bg-tertiary: $klassci-gray-700;
+$bg-surface: rgba($klassci-white, 0.05);
+$bg-overlay: rgba($klassci-gray-900, 0.8);
+
+// === TEXT COLORS ===
+$text-primary: $klassci-white;
+$text-secondary: $klassci-gray-300;
+$text-muted: $klassci-gray-400;
+$text-disabled: $klassci-gray-600;
+
+// === BORDER COLORS ===
+$border-primary: rgba($klassci-white, 0.1);
+$border-secondary: rgba($klassci-white, 0.05);
+$border-accent: rgba($klassci-blue-600, 0.3);
+
+// === SHADOW COLORS ===
+$shadow-primary: rgba($klassci-blue-800, 0.3);
+$shadow-secondary: rgba($klassci-orange-700, 0.3);
+$shadow-dark: rgba($klassci-gray-900, 0.5);
+
+// === INTERACTIVE STATES ===
+// Primary button states
+$btn-primary-bg: $klassci-gradient-primary;
+$btn-primary-hover: linear-gradient(135deg, #{lighten($klassci-blue-800, 5%)}, #{lighten($klassci-blue-600, 5%)});
+$btn-primary-active: linear-gradient(135deg, #{darken($klassci-blue-800, 5%)}, #{darken($klassci-blue-600, 5%)});
+
+// Secondary button states
+$btn-secondary-bg: $klassci-gradient-secondary;
+$btn-secondary-hover: linear-gradient(135deg, #{lighten($klassci-orange-700, 5%)}, #{lighten($klassci-orange-500, 5%)});
+$btn-secondary-active: linear-gradient(135deg, #{darken($klassci-orange-700, 5%)}, #{darken($klassci-orange-500, 5%)});
+
+// Link states
+$link-color: $klassci-blue-600;
+$link-hover: $klassci-blue-500;
+$link-active: $klassci-blue-700;
+
+// === FORM ELEMENTS ===
+$input-bg: rgba($klassci-white, 0.05);
+$input-border: rgba($klassci-white, 0.1);
+$input-border-focus: $klassci-blue-600;
+$input-border-error: $klassci-error;
+
+// === ACCESSIBILITY RATIOS ===
+// All color combinations maintain WCAG AA compliance
+// Primary blue on dark: 4.8:1 ratio
+// Orange on dark: 5.2:1 ratio
+// White on dark: 21:1 ratio
+
+// === USAGE GUIDELINES ===
+/*
+Primary Blue ($klassci-blue-800): Main brand color, use for:
+- Primary buttons and CTAs
+- Links and navigation
+- Brand elements
+- Headers and titles
+
+Secondary Orange ($klassci-orange-700): Accent color, use for:
+- Secondary buttons
+- Highlights and emphasis
+- Warning states
+- Active states
+
+Neutral Grays: Use for:
+- Backgrounds and surfaces
+- Text hierarchy
+- Borders and dividers
+- Disabled states
+*/

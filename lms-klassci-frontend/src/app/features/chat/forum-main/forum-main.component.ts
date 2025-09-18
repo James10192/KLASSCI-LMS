@@ -18,6 +18,9 @@ import { LiquidGlassCardComponent } from '@shared/components/liquid-glass-card/l
     <lg-liquid-glass-background variant="default">
       <div class="forum-main-container">
         <div class="header">
+          <div class="brand-section">
+            <img src="assets/images/logo_klassci.png" alt="KLASSCI" class="brand-logo">
+          </div>
           <h1>Forums de Discussion</h1>
           <p>Espaces d'échange et de collaboration pour la communauté KLASSCI</p>
         </div>
@@ -112,6 +115,22 @@ import { LiquidGlassCardComponent } from '@shared/components/liquid-glass-card/l
     .header {
       text-align: center;
       margin-bottom: 3rem;
+    }
+
+    .brand-section {
+      margin-bottom: 2rem;
+
+      .brand-logo {
+        height: 60px;
+        width: auto;
+        max-width: 240px;
+        filter: drop-shadow(0 4px 8px rgba(59, 130, 246, 0.3));
+        transition: transform 0.3s ease;
+
+        &:hover {
+          transform: scale(1.05);
+        }
+      }
     }
 
     .header h1 {

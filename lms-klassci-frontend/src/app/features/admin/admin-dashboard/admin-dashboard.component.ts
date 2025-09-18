@@ -17,6 +17,9 @@ import { LiquidGlassCardComponent } from '@shared/components/liquid-glass-card/l
       <div class="admin-dashboard-container">
         <lg-liquid-glass-card variant="large" [opacity]="15" blur="lg">
           <div class="content">
+            <div class="brand-section">
+              <img src="assets/images/LOGO-KLASSCI-PNG.png" alt="KLASSCI" class="brand-logo">
+            </div>
             <h1>Tableau de bord Admin</h1>
             <p>Interface d'administration du système LMS KLASSCI.</p>
             <p>Fonctionnalités en développement...</p>
@@ -37,6 +40,21 @@ import { LiquidGlassCardComponent } from '@shared/components/liquid-glass-card/l
     .content {
       text-align: center;
       color: white;
+    }
+
+    .brand-section {
+      margin-bottom: 2rem;
+
+      .brand-logo {
+        height: 60px;
+        width: auto;
+        filter: drop-shadow(0 4px 8px rgba(59, 130, 246, 0.3));
+        transition: transform 0.3s ease;
+
+        &:hover {
+          transform: scale(1.05);
+        }
+      }
     }
 
     h1 {

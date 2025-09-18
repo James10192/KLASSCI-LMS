@@ -119,7 +119,8 @@ export class LiquidGlassBackgroundComponent implements OnInit {
   }
 
   private generateOrbs() {
-    const colors = ['#3b82f6', '#6366f1', '#8b5cf6', '#06b6d4'];
+    // Couleurs KLASSCI pour les orbes flottantes
+    const colors = ['#1e4d9b', '#2563eb', '#ff4500', '#3b82f6'];
     const sizes = ['w-32 h-32', 'w-48 h-48', 'w-64 h-64', 'w-80 h-80'];
 
     const orbsData: FloatingOrb[] = Array.from({ length: 5 }, (_, i) => ({

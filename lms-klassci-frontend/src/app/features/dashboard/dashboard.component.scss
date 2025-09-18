@@ -23,6 +23,23 @@
   }
 }
 
+.brand-section {
+  .brand-logo {
+    height: 50px;
+    width: auto;
+    filter: drop-shadow(0 4px 8px rgba(59, 130, 246, 0.3));
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 768px) {
+      height: 40px;
+    }
+  }
+}
+
 .welcome-section {
   flex: 1;
   min-width: 300px;

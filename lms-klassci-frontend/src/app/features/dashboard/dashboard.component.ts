@@ -31,6 +31,9 @@ interface DashboardCard {
 
         <!-- Header -->
         <header class="dashboard-header">
+          <div class="brand-section">
+            <img src="assets/images/LOGO-KLASSCI-PNG.png" alt="KLASSCI" class="brand-logo">
+          </div>
           <div class="welcome-section">
             <h1 class="welcome-title">
               Bonjour {{ currentUser()?.nom || 'Utilisateur' }} 👋

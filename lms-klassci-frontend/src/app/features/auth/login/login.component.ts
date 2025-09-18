@@ -25,11 +25,8 @@ import { KlassciApiService } from '@core/services/klassci-api.service';
         <!-- Logo et titre -->
         <div class="header-section">
           <div class="logo-container">
-            <div class="logo-placeholder">
-              <span class="logo-text">LMS</span>
-            </div>
+            <img src="assets/images/logo_klassci.png" alt="KLASSCI" class="logo-image">
           </div>
-          <h1 class="app-title">KLASSCI</h1>
           <p class="app-subtitle">Plateforme d'apprentissage moderne</p>
         </div>
 

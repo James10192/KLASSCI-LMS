@@ -1,17 +1,20 @@
 // Import Angular Material theme (v17+ uses @use) - MUST be first
 @use '@angular/material' as mat;
 
+// Import KLASSCI brand colors
+@import 'styles/klassci-colors';
+
 // Imports Tailwind CSS
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-// Variables globales liquid glass
+// Variables globales liquid glass avec couleurs KLASSCI
 :root {
-  // Couleurs liquid glass
-  --lg-primary: #3b82f6;
-  --lg-secondary: #8b5cf6;
-  --lg-accent: #06b6d4;
+  // Couleurs liquid glass KLASSCI
+  --lg-primary: #{$klassci-blue-800};        // Bleu principal KLASSCI
+  --lg-secondary: #{$klassci-orange-700};    // Orange secondaire KLASSCI
+  --lg-accent: #{$klassci-blue-600};         // Bleu accent
 
   // Opacités
   --lg-glass-opacity: 0.1;
@@ -58,43 +61,43 @@ html {
 
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
-  color: #f1f5f9;
+  background: $klassci-gradient-background;
+  color: $text-primary;
   line-height: 1.6;
   overflow-x: hidden;
   min-height: 100vh;
 }
 
-// Sélection de texte
+// Sélection de texte avec couleurs KLASSCI
 ::selection {
-  background: rgba(59, 130, 246, 0.3);
-  color: white;
+  background: rgba($klassci-blue-600, 0.3);
+  color: $klassci-white;
 }
 
 ::-moz-selection {
-  background: rgba(59, 130, 246, 0.3);
-  color: white;
+  background: rgba($klassci-blue-600, 0.3);
+  color: $klassci-white;
 }
 
-// Scrollbars personnalisées
+// Scrollbars personnalisées avec couleurs KLASSCI
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.5);
+  background: rgba($klassci-gray-900, 0.5);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(59, 130, 246, 0.5);
+  background: rgba($klassci-blue-600, 0.5);
   border-radius: 4px;
   transition: background 0.2s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(59, 130, 246, 0.7);
+  background: rgba($klassci-blue-600, 0.7);
 }
 
 // Classes utilitaires liquid glass
@@ -196,9 +199,9 @@ body {
   }
 }
 
-// Typography
+// Typography avec couleurs KLASSCI
 .lg-text-gradient {
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4);
+  background: $klassci-gradient-brand;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -206,23 +209,23 @@ body {
 }
 
 .lg-text-glow {
-  text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+  text-shadow: 0 0 20px rgba($klassci-blue-600, 0.5);
 }
 
-// Fallbacks pour navigateurs non supportés
+// Fallbacks pour navigateurs non supportés avec couleurs KLASSCI
 .no-backdrop-filter {
   .lg-glass {
-    background: rgba(30, 41, 59, 0.8);
+    background: rgba($klassci-gray-800, 0.8);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
 
   .lg-glass-strong {
-    background: rgba(30, 41, 59, 0.9);
+    background: rgba($klassci-gray-800, 0.9);
   }
 
   .lg-glass-subtle {
-    background: rgba(30, 41, 59, 0.6);
+    background: rgba($klassci-gray-800, 0.6);
   }
 }
 
