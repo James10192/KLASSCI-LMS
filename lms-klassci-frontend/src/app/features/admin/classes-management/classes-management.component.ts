@@ -77,12 +77,12 @@ import { KlassciApiService, KlassciClasse } from '@core/services/klassci-api.ser
               <div class="stat-content">
                 <div class="stat-icon purple">
                   <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                   </svg>
                 </div>
                 <div class="stat-info">
-                  <div class="stat-value">{{getActiveClasses()}}</div>
-                  <div class="stat-label">Classes Actives</div>
+                  <div class="stat-value">{{getTotalPlaces()}}</div>
+                  <div class="stat-label">Places Totales</div>
                 </div>
               </div>
             </lg-liquid-glass-card>
@@ -123,24 +123,24 @@ import { KlassciApiService, KlassciClasse } from '@core/services/klassci-api.ser
                   @for (classe of filteredClasses(); track classe.id) {
                     <div class="classe-card" [class.inactive]="!classe.is_active">
                       <div class="classe-header">
-                        <h3 class="classe-name">{{classe.nom}}</h3>
-                        <div class="classe-status" [class.active]="classe.is_active">
-                          {{classe.is_active ? 'Active' : 'Inactive'}}
+                        <h3 class="classe-name">{{classe.name}}</h3>
+                        <div class="classe-status active">
+                          Active
                         </div>
                       </div>
 
                       <div class="classe-info">
                         <div class="info-item">
                           <span class="label">Étudiants:</span>
-                          <span class="value">{{classe.nb_etudiants || 0}}</span>
+                          <span class="value">{{classe.places_occupees}}/{{classe.places_totales}}</span>
                         </div>
                         <div class="info-item">
-                          <span class="label">Filière ID:</span>
-                          <span class="value">{{classe.filiere_id}}</span>
+                          <span class="label">Filière:</span>
+                          <span class="value">{{classe.filiere?.name || 'N/A'}}</span>
                         </div>
                         <div class="info-item">
-                          <span class="label">Niveau ID:</span>
-                          <span class="value">{{classe.niveau_id}}</span>
+                          <span class="label">Niveau:</span>
+                          <span class="value">{{classe.niveau?.name || 'N/A'}}</span>
                         </div>
                       </div>
 
@@ -191,10 +191,34 @@ import { KlassciApiService, KlassciClasse } from '@core/services/klassci-api.ser
   styles: [`
     .classes-management-container {
       min-height: 100vh;
+      max-height: 100vh;
+      overflow-y: auto;
       padding: 2rem;
       display: flex;
       flex-direction: column;
       gap: 2rem;
+
+      /* Scrollbar personnalisée */
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+
+      &::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 4px;
+        transition: background 0.3s ease;
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.5);
+        }
+      }
     }
 
     /* Header Section */
@@ -621,26 +645,28 @@ export class ClassesManagementComponent implements OnInit {
   filterClasses() {
     const term = this.searchTerm.toLowerCase();
     const filtered = this.classes().filter(classe =>
-      classe.nom.toLowerCase().includes(term)
+      classe.name.toLowerCase().includes(term) ||
+      (classe.filiere?.name || '').toLowerCase().includes(term) ||
+      (classe.niveau?.name || '').toLowerCase().includes(term)
     );
     this.filteredClasses.set(filtered);
   }
 
   getTotalStudents(): number {
-    return this.classes().reduce((total, classe) => total + (classe.nb_etudiants || 0), 0);
+    return this.classes().reduce((total, classe) => total + classe.places_occupees, 0);
   }
 
-  getActiveClasses(): number {
-    return this.classes().filter(classe => classe.is_active).length;
+  getTotalPlaces(): number {
+    return this.classes().reduce((total, classe) => total + classe.places_totales, 0);
   }
 
   viewStudents(classe: KlassciClasse) {
-    console.log('Voir les étudiants de:', classe.nom);
+    console.log('Voir les étudiants de:', classe.name);
     // TODO: Navigation vers la liste des étudiants
   }
 
   editClasse(classe: KlassciClasse) {
-    console.log('Modifier la classe:', classe.nom);
+    console.log('Modifier la classe:', classe.name);
     // TODO: Ouvrir le modal d'édition
   }
 }

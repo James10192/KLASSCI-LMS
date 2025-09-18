@@ -35,14 +35,26 @@ export interface KlassciAuthResponse {
 
 export interface KlassciClasse {
   id: number;
-  nom: string;
+  name: string;
+  libelle: string;
   filiere_id: number;
-  niveau_id: number;
-  nb_etudiants: number;
+  niveau_etude_id: number;
+  places_totales: number;
+  places_occupees: number;
   is_active: boolean;
-  statistiques?: {
-    nb_etudiants: number;
-    nb_matieres: number;
+  filiere?: {
+    id: number;
+    name: string;
+    libelle: string;
+    code: string;
+  };
+  niveau?: {
+    id: number;
+    name: string;
+    libelle: string;
+    code: string;
+    type: string;
+    year: number;
   };
 }
 
