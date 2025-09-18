@@ -185,6 +185,69 @@ background: linear-gradient(135deg, #ff6b47, #ff8a65);
 3. Valider sur différents écrans et thèmes
 4. Documenter les changements
 
+## 🎛️ Angular Material Theming
+
+### Configuration du Thème
+
+Le système utilise Angular Material 17+ avec les couleurs KLASSCI intégrées :
+
+```scss
+// Palettes personnalisées KLASSCI
+$klassci-blue-palette: (
+  800: #1e4d9b,  // Couleur primaire
+  // ... autres nuances
+);
+
+$klassci-orange-palette: (
+  600: #ff4500,  // Couleur accent
+  // ... autres nuances
+);
+
+// Application du thème
+$light-theme: mat.define-light-theme((
+  color: (
+    primary: $primary-palette,
+    accent: $accent-palette,
+  ),
+  typography: $typography-config,
+));
+```
+
+### Composants Material Personnalisés
+
+- **Boutons** : Utilisent les gradients KLASSCI
+- **Snackbars** : Effet liquid glass avec couleurs KLASSCI
+- **Dialogs** : Fond liquid glass semi-transparent
+- **Form fields** : Style liquid glass avec focus KLASSCI
+
+## 📱 PWA et Assets
+
+### Icônes PWA
+Toutes les tailles d'icônes PWA sont générées à partir du logo KLASSCI :
+- 72x72, 96x96, 128x128, 144x144, 152x152, 192x192, 384x384, 512x512
+
+### Manifest PWA
+Configuration complète avec couleurs KLASSCI :
+```json
+{
+  "name": "LMS KLASSCI",
+  "theme_color": "#1e293b",
+  "background_color": "#0f172a"
+}
+```
+
+## ⚡ Optimisations
+
+### Performance
+- Suppression du préchargement de polices non utilisées
+- Chargement optimisé des polices Google Fonts
+- Lazy loading des composants Angular
+
+### Accessibilité
+- Ratios de contraste WCAG AA conformes
+- Support des thèmes sombres/clairs
+- Navigation au clavier optimisée
+
 ---
 
 **Note** : Ce système de design est vivant et évolue avec la marque KLASSCI. Toutes les couleurs sont extraites des logos officiels pour garantir la cohérence de l'identité visuelle.

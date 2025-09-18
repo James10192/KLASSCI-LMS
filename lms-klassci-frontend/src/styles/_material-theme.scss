@@ -1,0 +1,248 @@
+// Angular Material Custom Theme for KLASSCI
+// Using Angular 17+ theming API with KLASSCI brand colors
+
+@use '@angular/material' as mat;
+
+// Include the common styles for Angular Material core
+@include mat.core();
+
+// Define custom KLASSCI color palettes
+// Primary: KLASSCI Blue palette
+$klassci-blue-palette: (
+  50: #eff6ff,
+  100: #dbeafe,
+  200: #bfdbfe,
+  300: #93c5fd,
+  400: #60a5fa,
+  500: #3b82f6,
+  600: #2563eb,
+  700: #1d4ed8,
+  800: #1e4d9b,  // KLASSCI brand blue
+  900: #1a3f7a,
+  A100: #bfdbfe,
+  A200: #93c5fd,
+  A400: #60a5fa,
+  A700: #1d4ed8,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: rgba(black, 0.87),
+    400: rgba(black, 0.87),
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+    A100: rgba(black, 0.87),
+    A200: rgba(black, 0.87),
+    A400: rgba(black, 0.87),
+    A700: white,
+  )
+);
+
+// Accent: KLASSCI Orange palette
+$klassci-orange-palette: (
+  50: #fff3e0,
+  100: #ffccbc,
+  200: #ffab91,
+  300: #ff8a65,
+  400: #ff6b47,
+  500: #ff5722,
+  600: #ff4500,  // KLASSCI brand orange
+  700: #ea580c,
+  800: #c2410c,
+  900: #7c2d12,
+  A100: #ffab91,
+  A200: #ff8a65,
+  A400: #ff5722,
+  A700: #ea580c,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: rgba(black, 0.87),
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+    A100: rgba(black, 0.87),
+    A200: rgba(black, 0.87),
+    A400: white,
+    A700: white,
+  )
+);
+
+// Warn: Material Red (standard)
+$warn-palette: mat.define-palette(mat.$red-palette);
+
+// Create color palettes
+$primary-palette: mat.define-palette($klassci-blue-palette, 800); // Use KLASSCI brand blue as default
+$accent-palette: mat.define-palette($klassci-orange-palette, 600);  // Use KLASSCI brand orange as default
+
+// Create typography configuration
+$typography-config: mat.define-typography-config(
+  $font-family: 'Inter, system-ui, -apple-system, sans-serif',
+  $headline-1: mat.define-typography-level(2.5rem, 3rem, 800),
+  $headline-2: mat.define-typography-level(2rem, 2.5rem, 700),
+  $headline-3: mat.define-typography-level(1.75rem, 2.25rem, 600),
+  $headline-4: mat.define-typography-level(1.5rem, 2rem, 600),
+  $headline-5: mat.define-typography-level(1.25rem, 1.75rem, 600),
+  $headline-6: mat.define-typography-level(1.125rem, 1.5rem, 600),
+  $subtitle-1: mat.define-typography-level(1rem, 1.5rem, 500),
+  $subtitle-2: mat.define-typography-level(0.875rem, 1.25rem, 500),
+  $body-1: mat.define-typography-level(1rem, 1.5rem, 400),
+  $body-2: mat.define-typography-level(0.875rem, 1.25rem, 400),
+  $button: mat.define-typography-level(0.875rem, 1.25rem, 600),
+  $caption: mat.define-typography-level(0.75rem, 1rem, 400),
+  $overline: mat.define-typography-level(0.75rem, 1rem, 500),
+);
+
+// Create light theme
+$light-theme: mat.define-light-theme((
+  color: (
+    primary: $primary-palette,
+    accent: $accent-palette,
+    warn: $warn-palette,
+  ),
+  typography: $typography-config,
+  density: 0,
+));
+
+// Create dark theme
+$dark-theme: mat.define-dark-theme((
+  color: (
+    primary: $primary-palette,
+    accent: $accent-palette,
+    warn: $warn-palette,
+  ),
+  typography: $typography-config,
+  density: 0,
+));
+
+// Apply the light theme by default
+@include mat.all-component-themes($light-theme);
+
+// Dark theme class
+.dark-theme {
+  @include mat.all-component-colors($dark-theme);
+}
+
+// Custom Material component styles with KLASSCI branding
+.mat-mdc-button {
+  &.mat-primary {
+    --mdc-filled-button-container-color: #{mat.get-color-from-palette($primary-palette, 800)};
+    --mdc-filled-button-label-text-color: white;
+
+    &:hover {
+      --mdc-filled-button-hover-container-color: #{mat.get-color-from-palette($primary-palette, 700)};
+    }
+  }
+
+  &.mat-accent {
+    --mdc-filled-button-container-color: #{mat.get-color-from-palette($accent-palette, 600)};
+    --mdc-filled-button-label-text-color: white;
+
+    &:hover {
+      --mdc-filled-button-hover-container-color: #{mat.get-color-from-palette($accent-palette, 500)};
+    }
+  }
+}
+
+// Custom snackbar with liquid glass effect
+.mat-mdc-snack-bar-container {
+  &.klassci-snackbar {
+    background: rgba(30, 77, 155, 0.9) !important;
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    color: white;
+    box-shadow: 0 10px 25px rgba(30, 77, 155, 0.3);
+  }
+
+  &.klassci-snackbar-success {
+    background: rgba(16, 185, 129, 0.9) !important;
+    box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+  }
+
+  &.klassci-snackbar-error {
+    background: rgba(239, 68, 68, 0.9) !important;
+    box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3);
+  }
+
+  &.klassci-snackbar-warning {
+    background: rgba(255, 69, 0, 0.9) !important;
+    box-shadow: 0 10px 25px rgba(255, 69, 0, 0.3);
+  }
+}
+
+// Custom dialog with liquid glass effect
+.mat-mdc-dialog-container {
+  &.klassci-dialog {
+    background: rgba(15, 23, 42, 0.95) !important;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  }
+}
+
+// Form field customization
+.mat-mdc-form-field {
+  &.klassci-form-field {
+    .mdc-text-field--filled {
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+
+      .mdc-text-field__input {
+        color: white;
+      }
+
+      .mdc-floating-label {
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      &.mdc-text-field--focused .mdc-floating-label {
+        color: #{mat.get-color-from-palette($primary-palette, 600)};
+      }
+    }
+
+    .mdc-line-ripple::before {
+      border-bottom-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .mdc-line-ripple::after {
+      border-bottom-color: #{mat.get-color-from-palette($primary-palette, 600)};
+    }
+  }
+}
+
+// Progress bar customization
+.mat-mdc-progress-bar {
+  &.klassci-progress {
+    --mdc-linear-progress-active-indicator-color: #{mat.get-color-from-palette($primary-palette, 600)};
+    --mdc-linear-progress-track-color: rgba(30, 77, 155, 0.2);
+  }
+}
+
+// Checkbox and radio customization
+.mat-mdc-checkbox, .mat-mdc-radio-button {
+  &.mat-primary {
+    --mdc-checkbox-selected-checkmark-color: white;
+    --mdc-checkbox-selected-focus-icon-color: #{mat.get-color-from-palette($primary-palette, 800)};
+    --mdc-checkbox-selected-hover-icon-color: #{mat.get-color-from-palette($primary-palette, 700)};
+    --mdc-checkbox-selected-icon-color: #{mat.get-color-from-palette($primary-palette, 800)};
+    --mdc-checkbox-selected-pressed-icon-color: #{mat.get-color-from-palette($primary-palette, 900)};
+  }
+}
+
+// Slider customization
+.mat-mdc-slider {
+  &.mat-primary {
+    --mdc-slider-active-track-color: #{mat.get-color-from-palette($primary-palette, 600)};
+    --mdc-slider-handle-color: #{mat.get-color-from-palette($primary-palette, 600)};
+    --mdc-slider-with-tick-marks-active-container-color: #{mat.get-color-from-palette($primary-palette, 600)};
+  }
+}

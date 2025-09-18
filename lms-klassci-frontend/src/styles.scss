@@ -1,8 +1,8 @@
-// Import Angular Material theme (v17+ uses @use) - MUST be first
-@use '@angular/material' as mat;
-
-// Import KLASSCI brand colors
+// Import KLASSCI brand colors first
 @import 'styles/klassci-colors';
+
+// Import Angular Material theme with KLASSCI branding - MUST be after colors
+@import 'styles/material-theme';
 
 // Imports Tailwind CSS
 @import 'tailwindcss/base';
