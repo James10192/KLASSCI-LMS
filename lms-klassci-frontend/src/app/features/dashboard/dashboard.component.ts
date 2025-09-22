@@ -397,7 +397,7 @@ export class DashboardComponent implements OnInit {
     this.klassciApi.getClasses().subscribe({
       next: (classes) => {
         const totalStudents = classes.reduce((total, classe) =>
-          total + (classe.statistiques?.nb_etudiants || 0), 0);
+          total + classe.places_occupees, 0);
         this.updateCardValue('students', totalStudents);
         console.log('📊 Dashboard - Students loaded:', totalStudents);
       },

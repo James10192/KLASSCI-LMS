@@ -144,19 +144,24 @@ import { KlassciApiService, KlassciClasse } from '@core/services/klassci-api.ser
                         </div>
                       </div>
 
+                      <div class="capacity-bar">
+                        <div class="capacity-info">
+                          <span class="capacity-label">Capacité</span>
+                          <span class="capacity-ratio">{{classe.places_occupees}}/{{classe.places_totales}}</span>
+                        </div>
+                        <div class="progress-bar">
+                          <div class="progress-fill" [style.width.%]="getCapacityPercentage(classe)"></div>
+                        </div>
+                        <div class="capacity-percentage">{{getCapacityPercentage(classe)}}%</div>
+                      </div>
+
                       <div class="classe-actions">
-                        <button class="action-btn small primary" (click)="viewStudents(classe)">
+                        <button class="action-btn primary full-width" (click)="viewStudents(classe)">
                           <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                           </svg>
-                          Voir
-                        </button>
-                        <button class="action-btn small secondary" (click)="editClasse(classe)">
-                          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                          </svg>
-                          Modifier
+                          Voir la classe
                         </button>
                       </div>
                     </div>
@@ -197,13 +202,14 @@ import { KlassciApiService, KlassciClasse } from '@core/services/klassci-api.ser
       display: flex;
       flex-direction: column;
       gap: 2rem;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
 
-      /* Scrollbar personnalisée */
+      /* Scrollbar KLASSCI */
       scrollbar-width: thin;
-      scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+      scrollbar-color: #1e4d9b transparent;
 
       &::-webkit-scrollbar {
-        width: 8px;
+        width: 6px;
       }
 
       &::-webkit-scrollbar-track {
@@ -211,12 +217,11 @@ import { KlassciApiService, KlassciClasse } from '@core/services/klassci-api.ser
       }
 
       &::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.3);
-        border-radius: 4px;
-        transition: background 0.3s ease;
+        background: #1e4d9b;
+        border-radius: 3px;
 
         &:hover {
-          background: rgba(255, 255, 255, 0.5);
+          background: #3b82f6;
         }
       }
     }
@@ -447,6 +452,56 @@ import { KlassciApiService, KlassciClasse } from '@core/services/klassci-api.ser
       font-size: 0.875rem;
     }
 
+    /* Capacity Progress Bar */
+    .capacity-bar {
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background: rgba(30, 77, 155, 0.1);
+      border: 1px solid rgba(30, 77, 155, 0.3);
+      border-radius: 8px;
+    }
+
+    .capacity-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .capacity-label {
+      font-size: 0.875rem;
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    .capacity-ratio {
+      font-size: 0.875rem;
+      color: white;
+      font-weight: 600;
+    }
+
+    .progress-bar {
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 0.5rem;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #1e4d9b, #3b82f6);
+      border-radius: 3px;
+      transition: width 0.6s ease;
+    }
+
+    .capacity-percentage {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #1e4d9b;
+      font-weight: 600;
+    }
+
     .classe-actions {
       display: flex;
       gap: 0.75rem;
@@ -476,14 +531,19 @@ import { KlassciApiService, KlassciClasse } from '@core/services/klassci-api.ser
     }
 
     .action-btn.primary {
-      background: rgba(59, 130, 246, 0.2);
-      border-color: rgba(59, 130, 246, 0.4);
+      background: linear-gradient(135deg, #1e4d9b, #3b82f6);
+      border-color: rgba(30, 77, 155, 0.4);
     }
 
     .action-btn.primary:hover {
-      background: rgba(59, 130, 246, 0.3);
+      background: linear-gradient(135deg, #2563eb, #60a5fa);
       transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
+      box-shadow: 0 8px 20px rgba(30, 77, 155, 0.3);
+    }
+
+    .action-btn.full-width {
+      width: 100%;
+      justify-content: center;
     }
 
     .action-btn.secondary {
@@ -660,13 +720,13 @@ export class ClassesManagementComponent implements OnInit {
     return this.classes().reduce((total, classe) => total + classe.places_totales, 0);
   }
 
-  viewStudents(classe: KlassciClasse) {
-    console.log('Voir les étudiants de:', classe.name);
-    // TODO: Navigation vers la liste des étudiants
+  getCapacityPercentage(classe: KlassciClasse): number {
+    if (!classe.places_totales) return 0;
+    return Math.round((classe.places_occupees / classe.places_totales) * 100);
   }
 
-  editClasse(classe: KlassciClasse) {
-    console.log('Modifier la classe:', classe.name);
-    // TODO: Ouvrir le modal d'édition
+  viewStudents(classe: KlassciClasse) {
+    console.log('Afficher détails classe:', classe.name);
+    // TODO: Navigation vers la page de détail avec étudiants et matières
   }
 }
